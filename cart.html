@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #666, #888);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .header .logo {
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .header h1 {
+            font-size: 20px;
+            font-weight: normal;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+        
+        .cart-items {
+            padding: 20px;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .item-details {
+            flex: 1;
+        }
+        
+        .item-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .item-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .item-pricing {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .current-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .discount {
+            background: #e8f5e8;
+            color: #4caf50;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .quantity-btn:hover {
+            background: #f5f5f5;
+        }
+        
+        .quantity-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .quantity {
+            font-size: 16px;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .remove-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .remove-btn:hover {
+            color: #d32f2f;
+        }
+        
+        .delivery-section {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .delivery-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .delivery-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+        }
+        
+        .location-icon {
+            width: 20px;
+            height: 20px;
+            background: #2196f3;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .delivery-details {
+            flex: 1;
+        }
+        
+        .delivery-name {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        
+        .delivery-address {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .delivery-arrow {
+            font-size: 20px;
+            color: #666;
+        }
+        
+        .price-section {
+            padding: 20px;
+        }
+        
+        .price-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #666;
+        }
+        
+        .price-row.total {
+            font-weight: bold;
+            color: #333;
+            font-size: 18px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+        
+        .savings {
+            color: #4caf50;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #d32f2f, #f44336);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+        }
+        
+        .checkout-btn:hover {
+            background: linear-gradient(45deg, #b71c1c, #d32f2f);
+        }
+        
+        .rupee {
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🛒</div>
+            <h1>My Cart</h1>
+        </div>
+        
+        <div class="cart-items">
+            <div class="cart-item">
+                <div class="item-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRkZGIiBzdHJva2U9IiNEREQiLz4KPHN2ZyB4PSIxMCIgeT0iMTAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMTIgMkwyIDdWMTdMMTIgMjJMMjIgMTdWN0wxMiAyWiIgZmlsbD0iI0ZGNjUwMCIgc3Ryb2tlPSIjRkY2NTAwIiBzdHJva2Utd2lkdGg9IjIiLz4KPHN2ZyB4PSI4IiB5PSI4IiB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjQiIGZpbGw9IiNGRkYiLz4KPC9zdmc+CjwvcGF0aD4KPC9zdmc+Cjwvc3ZnPgo=" alt="Art Canvas Painting">
+                </div>
+                <div class="item-details">
+                    <div class="item-title">Art Canvas Painting</div>
+                    <div class="item-subtitle">Art Canvas Painting, Hardcover</div>
+                    <div class="item-subtitle">Delivery by may 4</div>
+                    <div class="item-pricing">
+                        <span class="original-price"><span class="rupee">₹</span>499</span>
+                        <span class="current-price"><span class="rupee">₹</span>399</span>
+                        <span class="discount">25% off</span>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="updateQuantity(0, -1)">−</button>
+                        <span class="quantity" id="qty-0">1</span>
+                        <button class="quantity-btn" onclick="updateQuantity(0, 1)">+</button>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(0)">
+                        🗑️ remove
+                    </button>
+                </div>
+            </div>
+            
+            <div class="cart-item">
+                <div class="item-image">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRkZGIiBzdHJva2U9IiNEREQiLz4KPHN2ZyB4PSIxNSIgeT0iMjAiIHdpZHRoPSI1MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNOSAxMkw5IDE2TDE1IDE2TDE1IDEyTDkgMTJaIiBmaWxsPSIjRkZENzAwIi8+CjxwYXRoIGQ9Ik02IDhMNiAxOEwxOCAxOEwxOCA4TDYgOFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0ZGRDcwMCIgc3Ryb2tlLXdpZHRoPSIyIi8+CjxjaXJjbGUgY3g9IjEwIiBjeT0iMTAiIHI9IjEiIGZpbGw9IiNGRkQ3MDAiLz4KPGNpcmNsZSBjeD0iMTQiIGN5PSIxNCIgcj0iMSIgZmlsbD0iI0ZGRDcwMCIvPgo8L3N2Zz4KPC9zdmc+" alt="Dokra Metal">
+                </div>
+                <div class="item-details">
+                    <div class="item-title">Dokra Metal</div>
+                    <div class="item-subtitle">Dokra Metal, English, Hardcover</div>
+                    <div class="item-subtitle">Delivery by sept 2</div>
+                    <div class="item-pricing">
+                        <span class="original-price"><span class="rupee">₹</span>399</span>
+                        <span class="current-price"><span class="rupee">₹</span>299</span>
+                        <span class="discount">25% off</span>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="updateQuantity(1, -1)">−</button>
+                        <span class="quantity" id="qty-1">1</span>
+                        <button class="quantity-btn" onclick="updateQuantity(1, 1)">+</button>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(1)">
+                        🗑️ remove
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="delivery-section">
+            <div class="delivery-title">Delivery Info</div>
+            <div class="delivery-info" onclick="changeAddress()">
+                <div class="location-icon"></div>
+                <div class="delivery-details">
+                    <div class="delivery-name">Sarthak saini</div>
+                    <div class="delivery-address">52, Nahrunagar, Uttar Pradesh, 480010</div>
+                </div>
+                <div class="delivery-arrow">›</div>
+            </div>
+        </div>
+        
+        <div class="price-section">
+            <div class="price-title">Price Details</div>
+            <div class="price-row">
+                <span>SubTotal</span>
+                <span class="rupee">₹ <span id="subtotal">698</span></span>
+            </div>
+            <div class="price-row">
+                <span>Shipping charge</span>
+                <span class="rupee">₹ <span id="shipping">60</span></span>
+            </div>
+            <div class="price-row savings">
+                <span>You Saved</span>
+                <span class="rupee">₹ <span id="savings">160</span></span>
+            </div>
+            <div class="price-row total">
+                <span>Total</span>
+                <span class="rupee">₹ <span id="total">538</span></span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToPayment()">CONTINUE TO PAYMENT</button>
+        </div>
+    </div>
+    
+    <script>
+        // Cart data
+        let cartData = [
+            {
+                id: 0,
+                name: "Art Canvas Painting",
+                subtitle: "Art Canvas Painting, Hardcover",
+                delivery: "Delivery by may 4",
+                originalPrice: 499,
+                currentPrice: 399,
+                quantity: 1,
+                discount: 25
+            },
+            {
+                id: 1,
+                name: "Dokra Metal",
+                subtitle: "Dokra Metal, English, Hardcover",
+                delivery: "Delivery by sept 2",
+                originalPrice: 399,
+                currentPrice: 299,
+                quantity: 1,
+                discount: 25
+            }
+        ];
+        
+        const shippingCharge = 60;
+        
+        function updateQuantity(itemId, change) {
+            const item = cartData.find(item => item.id === itemId);
+            if (item) {
+                item.quantity = Math.max(1, item.quantity + change);
+                document.getElementById(`qty-${itemId}`).textContent = item.quantity;
+                updatePricing();
+            }
+        }
+        
+        function removeItem(itemId) {
+            if (confirm('Are you sure you want to remove this item from your cart?')) {
+                cartData = cartData.filter(item => item.id !== itemId);
+                location.reload(); // Simple way to refresh the cart display
+            }
+        }
+        
+        function updatePricing() {
+            const subtotal = cartData.reduce((sum, item) => sum + (item.currentPrice * item.quantity), 0);
+            const originalTotal = cartData.reduce((sum, item) => sum + (item.originalPrice * item.quantity), 0);
+            const savings = originalTotal - subtotal;
+            const total = subtotal + shippingCharge;
+            
+            document.getElementById('subtotal').textContent = subtotal;
+            document.getElementById('savings').textContent = savings;
+            document.getElementById('total').textContent = total;
+        }
+        
+        function changeAddress() {
+            alert('Address change functionality would open an address selection modal.');
+        }
+        
+        function proceedToPayment() {
+            const total = document.getElementById('total').textContent;
+            alert(`Proceeding to payment for ₹${total}. This would redirect to payment gateway.`);
+        }
+        
+        // Initialize pricing on page load
+        updatePricing();
+    </script>
+</body>
+</html>
